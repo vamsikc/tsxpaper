@@ -1,0 +1,88 @@
+\documentclass{acm_proc_article-sp}
+
+\begin{document}
+\newcommand{\tab}{\hspace*{2em}}
+
+\title{Reducing Synchronization Overhead Using Hardware Transactional Memory}
+
+\numberofauthors{3} 
+\author{
+\alignauthor
+Vamsi Chitters\\
+       \email{vchitters@berkeley.edu}
+\alignauthor
+Adam Midvidy\\
+       \email{amidvidy@berkeley.edu}
+\and % go to new row
+\alignauthor
+Jeff Tsui\\
+       \email{tsui.jeff@berkeley.edu}
+}
+
+\date{20 April 2013}
+
+
+\maketitle
+\begin{abstract}
+ 
+\end{abstract}
+
+% A category with the (minimum) three required fields
+\category{H.4}{Transactional Memory}{TSX, Intel}
+%A category including the fourth, optional field follows...
+\category{D.2.8}{LevelDB}{Metrics}[complexity measures, performance measures]
+
+\terms{Theory}
+
+\keywords{ACM proceedings, \LaTeX, text tagging} % NOT required for Proceedings
+
+\section*{Introduction}
+Sample text. Sample text. Sample text. Sample text. Sample text. Sample text. 
+Sample text. Sample text. Sample text. Sample text. Sample text. Sample text. 
+Sample text. Sample text. Sample text. Sample text. Sample text. Sample text. 
+Sample text. Sample text. Sample text. Sample text. Sample text. Sample text. 
+Sample text. Sample text. Sample text. Sample text. Sample text. Sample text. 
+Sample text. Sample text. Sample text. Sample text. Sample text. Sample text. 
+Sample text. Sample text. Sample text. Sample text. Sample text. Sample text. 
+
+Citation of Einstein paper~\cite{Einstein}.
+
+\section*{Motivation}
+\tab As physical limitations have curtailed the growth of processor clock speeds, CPU designers have turned to increasing the number of processor cores on a single CPU to improve performance. Consequently, application developers must exploit concurrency in their programs to fully utilize the underlying hardware. Unfortunately, traditional lock-based approaches to coordinating access to shared data lead to an unappealing tradeoff between performance and complexity: coarse-grained locking results in increased synchronization overhead, while fine-grained locking imposes a significant mental burden on the programmer, resulting in race conditions, deadlock and starvation.\\
+\tab Taking a page from the database research community, systems researchers have proposed transactional memory as an abstraction for safely modifying shared data. By grouping related updates into transactional regions that are executed atomically by the underlying hardware, application developers are able to indicate where synchronization is needed without concerning themselves with how it is implemented. As hardware support for transactional memory has not been widely available, attempts have been made to use software transactional memory (STM) instead of traditional locking, with negative performance implications [6].\\
+\tab Intel's latest processor architecture, Haswell, is the first to provide Transactional Synchronization Extensions (TSX) as an implementation of hardware transactional memory (HTM). With TSX, the hardware can speculatively execute transactional regions concurrently, committing changes if no thread's write-set conflicts with another's read-set. If a conflict does occur, the hardware will rollback the changes and execute a fallback code path. Intel researchers were able to use TSX to achieve a 1.41x performance improvement on HPC workloads and a 1.31x improvement in the performance of a user-level TCP/IP stack [2]. However, it remains to be seen if TSX can successfully be used to accelerate database-style workloads. We aim to incorporate the new TSX instruction set to improve the performance of LevelDB [3], a persistent key-value store used as a storage engine in Google Chrome, as well as the NoSQL databases Riak [4] and HyperDex [5], and other open source projects.
+
+
+\section*{Transactional Memory}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\section*{LevelDB}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\section*{Results and Discussions}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+Google originally developed LevelDB as an in-house, embedded key value store that is based on BigTable SSTable, which provides a persistent, ordered immutable map from byte-string keys to values. Today, it is extensively adopted by various open-source databases, such as HyperDex and Riak, as a simple and well-designed storage engine. The memory management
+
+ LevelDB employs coarse-grained locking to synchronize access to shared data, 
+
+
+We choose LevelDB as an application to optimize using TSX because it is widely used as a library by popular open source software and thus is feasible to collect real workload data on. Internally, LevelDB employs coarse-grained locking to synchronize access to shared data, making it a good candidate for acceleration with HLE. As multiple open-source datastores [4, 5] have adopted LevelDB as a storage engine, their authors have released forks of LevelDB that provide finer-grained synchronization. As HLE intends to provide the performance of fine grained locking with the ease of implementation of coarse-grained locking, we plan to benchmark the performance of HLE against these forks of LevelDB, as an initial experiment. 
+
+In addition, we would like to modify LevelDB to exploit the concurrency primitives available in the RTM interface. We anticipate that this will require more extensive modification to the LevelDB code base than with HLE, but provide better performance. This approach also provides us with the opportunity to explore different fallback policies executed at transaction . We hope to determine general fallback policies programmers can use in a wide variety of cases, fully utilizing the flexibility of RTM.
+
+
+
+
+\bibliographystyle{abbrv}
+\bibliography{sample}
+
+%\balancecolumns 
+
+\end{document}
